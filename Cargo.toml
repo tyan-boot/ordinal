@@ -1,0 +1,13 @@
+[package]
+name = "ordinal"
+version = "0.1.0"
+edition = "2018"
+
+
+[dependencies]
+async-graphql = "2.9.9"
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros", "test-util", "fs"]}
+anyhow = "1"
+byte-unit = "4.0.12"
+hyper = { version = "0.14.11", features = ["server", "tcp", "http1"] }
+serde_json = "1"
