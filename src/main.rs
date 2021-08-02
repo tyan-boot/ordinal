@@ -7,6 +7,7 @@ use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Request, Response};
 use std::convert::Infallible;
 use std::net::SocketAddr;
+use std::time::Duration;
 
 mod graphql;
 mod sysinfo;
@@ -31,6 +32,19 @@ async fn query(req: Request<Body>, schema: RootSchema) -> Result<Response<Body>>
 #[tokio::main]
 async fn main() -> Result<()> {
     let sys_info = SysInfo::new();
+
+    tokio::spawn({
+        let sys_info = sys_info.clone();
+        async move {
+            let mut interval = tokio::time::interval(Duration::from_secs(5));
+
+            loop {
+                interval.tick().await;
+                sys_info.update().await.unwrap();
+            }
+        }
+    });
+
     let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
         .data(sys_info)
         .finish();
