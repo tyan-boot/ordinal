@@ -11,6 +11,7 @@ use std::time::Duration;
 
 mod graphql;
 mod sysinfo;
+mod smart;
 
 async fn query(req: Request<Body>, schema: RootSchema) -> Result<Response<Body>> {
     let body = hyper::body::to_bytes(req.into_body()).await?;
